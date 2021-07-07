@@ -102,4 +102,8 @@ export class SupplierAndConsumerComponent implements OnInit {
       });
     }
   }
+
+  public onClickNode(data: Node): void {
+    alert(data.data.office);
+  }
 }
