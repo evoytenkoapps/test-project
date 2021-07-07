@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 import { DagreNodesOnlyLayout, Edge, Layout, Node } from '@swimlane/ngx-graph';
 import * as shape from 'd3-shape';
 import { Orientation } from './customDagreNodesOnly';
-import { Employee } from '../../model/employee';
+import { Employee, NodeData } from '../../model/employee';
 import { max } from 'rxjs/operators';
 
 @Component({
@@ -35,7 +35,8 @@ export class SupplierAndConsumerComponent implements OnInit {
           office: employee.office,
           role: employee.role,
           backgroundColor: employee.backgroundColor,
-        },
+          isExpanded: false,
+        } as NodeData,
       };
 
       this.nodes.push(node);
@@ -104,6 +105,7 @@ export class SupplierAndConsumerComponent implements OnInit {
   }
 
   public onClickNode(data: Node): void {
-    alert(data.data.office);
+    data.data.isExpanded = !data.data.isExpanded;
+    console.log(data.data.isExpanded);
   }
 }

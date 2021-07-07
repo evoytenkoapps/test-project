@@ -6,3 +6,10 @@ export interface Employee {
   backgroundColor: string;
   upperManagerId?: string;
 }
+
+export interface NodeData {
+  office: string;
+  role: string;
+  backgroundColor: string;
+  isExpanded: boolean;
+}
