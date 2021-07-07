@@ -6,9 +6,10 @@ import { MainComponent } from './components/main/main.component';
 import { GraphModule, NgxGraphModule } from '@swimlane/ngx-graph';
 import { NgxGraphOrgTreeComponent } from './components/ngx-graph-org-tree/ngx-graph-org-tree.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SupplierAndConsumerComponent } from './components/supplier-and-consumer/supplier-and-consumer.component';
 
 @NgModule({
-  declarations: [AppComponent, MainComponent, NgxGraphOrgTreeComponent],
+  declarations: [AppComponent, MainComponent, NgxGraphOrgTreeComponent, SupplierAndConsumerComponent],
   imports: [BrowserModule, NgxGraphModule, BrowserAnimationsModule],
   providers: [],
   bootstrap: [AppComponent],
