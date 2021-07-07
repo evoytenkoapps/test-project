@@ -75,7 +75,7 @@ export class SupplierAndConsumerComponent implements OnInit {
           name: 'Manager ' + i,
           office: 'Office ' + i,
           role: 'Manager',
-          backgroundColor: '#DC143C',
+          backgroundColor: '#dc143c',
         });
         continue;
       }
@@ -105,7 +105,12 @@ export class SupplierAndConsumerComponent implements OnInit {
   }
 
   public onClickNode(data: Node): void {
-    data.data.isExpanded = !data.data.isExpanded;
-    console.log(data.data.isExpanded);
+    const nodeData: NodeData = data.data;
+    nodeData.isExpanded = !nodeData.isExpanded;
+    if (nodeData.isExpanded) {
+      nodeData.backgroundColor = '#27ac34';
+    } else {
+      nodeData.backgroundColor = '#DC143C';
+    }
   }
 }
