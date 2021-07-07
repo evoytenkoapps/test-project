@@ -3,6 +3,7 @@ import { DagreNodesOnlyLayout, Edge, Layout, Node } from '@swimlane/ngx-graph';
 import * as shape from 'd3-shape';
 import { Orientation } from './customDagreNodesOnly';
 import { Employee } from '../../model/employee';
+import { max } from 'rxjs/operators';
 
 @Component({
   selector: 'app-supplier-and-consumer',
@@ -21,10 +22,11 @@ export class SupplierAndConsumerComponent implements OnInit {
   public curve: any = shape.curveLinear;
   public layout: Layout = new DagreNodesOnlyLayout();
 
-  constructor() {}
+  constructor() {
+    this.createEmployee();
+  }
 
   public ngOnInit(): void {
-    this.createEmployee();
     for (const employee of this.employees) {
       const node: Node = {
         id: employee.id,
@@ -83,6 +85,20 @@ export class SupplierAndConsumerComponent implements OnInit {
         role: 'Engineer',
         backgroundColor: '#00FFFF',
         upperManagerId: '1',
+      });
+    }
+
+    const maxLength = this.employees.length + 10;
+
+    for (let i = this.employees.length + 1; i <= maxLength; i++) {
+      console.log('create empl2');
+      this.employees.push({
+        id: i.toString(),
+        name: 'Employee ' + i,
+        office: 'Office ' + i,
+        role: 'Engineer',
+        backgroundColor: '#00FFFF',
+        upperManagerId: '2',
       });
     }
   }
