@@ -96,9 +96,6 @@ export class SupplierAndConsumerComponent implements OnInit {
         source: employee.upperManagerId,
         target: employee.id,
         label: '',
-        data: {
-          linkText: 'Manager of',
-        },
       };
 
       this.links.push(edge);
