@@ -61,22 +61,23 @@ export class SupplierAndConsumerComponent implements OnInit {
   }
 
   private createEmployee(): void {
-    for (let i = 1; i <= 50; i++) {
+    for (let i = 1; i <= 10; i++) {
       if (i === 1) {
         this.employees.push({
           id: i.toString(),
-          name: 'Employee ' + i,
+          name: 'Manager ' + i,
           office: 'Office ' + i,
           role: 'Manager',
           backgroundColor: '#DC143C',
         });
+        continue;
       }
       this.employees.push({
         id: i.toString(),
         name: 'Employee ' + i,
         office: 'Office ' + i,
-        role: 'Manager',
-        backgroundColor: '#DC143C',
+        role: 'Engineer',
+        backgroundColor: '#00FFFF',
         upperManagerId: '1',
       });
     }
