@@ -27,21 +27,7 @@ export class SupplierAndConsumerComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    for (const employee of this.employees) {
-      const node: Node = {
-        id: employee.id,
-        label: employee.name,
-        data: {
-          office: employee.office,
-          role: employee.role,
-          backgroundColor: employee.backgroundColor,
-          isExpanded: false,
-        } as NodeData,
-      };
-
-      this.nodes.push(node);
-    }
-
+    this.nodes = this.createNodes(this.employees);
     for (const employee of this.employees) {
       if (!employee.upperManagerId) {
         continue;
@@ -57,6 +43,21 @@ export class SupplierAndConsumerComponent implements OnInit {
     }
   }
 
+  private createNodes(employees: Employee[]): Node[] {
+    return employees.map((employee) => {
+      return {
+        id: employee.id,
+        label: employee.name,
+        data: {
+          office: employee.office,
+          role: employee.role,
+          backgroundColor: employee.backgroundColor,
+          isExpanded: false,
+        } as NodeData,
+      };
+    });
+  }
+
   public getStyles(node: Node): any {
     return {
       'background-color': node.data.backgroundColor,
@@ -68,7 +69,7 @@ export class SupplierAndConsumerComponent implements OnInit {
   }
 
   private createEmployee(): void {
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 500; i++) {
       if (i === 1) {
         this.employees.push({
           id: i.toString(),
@@ -107,8 +108,18 @@ export class SupplierAndConsumerComponent implements OnInit {
   public onClickNode(data: Node): void {
     const nodeData: NodeData = data.data;
     nodeData.isExpanded = !nodeData.isExpanded;
+    console.log('data', data);
     if (nodeData.isExpanded) {
       nodeData.backgroundColor = '#27ac34';
+      // this.nodes = this.createNodes([
+      //   {
+      //     id: '1',
+      //     name: 'Manager ' + 1,
+      //     office: 'Office ' + 1,
+      //     role: 'Manager',
+      //     backgroundColor: '#dc143c',
+      //   },
+      // ]);
     } else {
       nodeData.backgroundColor = '#DC143C';
     }
