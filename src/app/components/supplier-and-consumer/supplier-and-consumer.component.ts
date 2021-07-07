@@ -60,6 +60,10 @@ export class SupplierAndConsumerComponent implements OnInit {
     };
   }
 
+  public onLinkClick(data: any): void {
+    console.log('data', data);
+  }
+
   private createEmployee(): void {
     for (let i = 1; i <= 10; i++) {
       if (i === 1) {

@@ -30,7 +30,11 @@
 
   <ng-template #linkTemplate let-link>
     <svg:g class="edge">
-      <svg:path class="line" stroke-width="2" marker-end="url(#arrow)" stroke-dasharray="4"></svg:path>
+      <svg:path
+        [class]="link.target % 2 === 0 ? 'line line--doted' : 'line line--no-doted'"
+        stroke-width="2"
+        marker-end="url(#arrow)"
+      ></svg:path>
       <svg:text class="edge-label" text-anchor="middle">
         <textPath
           class="text-path"
