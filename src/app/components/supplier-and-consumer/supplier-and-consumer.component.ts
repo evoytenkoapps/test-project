@@ -25,9 +25,8 @@ export class SupplierAndConsumerComponent implements OnInit {
   constructor() {}
 
   public ngOnInit(): void {
-    this.createEmployees();
-    this.nodes = this.getNodes(this.employees);
-    this.links = this.getLinks(this.employees);
+    this.employees = this.getEmployees();
+    this.changeGraph(this.employees);
   }
 
   private getNodes(employees: Employee[]): Node[] {
@@ -67,10 +66,11 @@ export class SupplierAndConsumerComponent implements OnInit {
     console.log('data', data);
   }
 
-  private createEmployees(): void {
+  private getEmployees(): Employee[] {
+    const employees: Employee[] = [];
     for (let i = 1; i <= 10; i++) {
       if (i === 1) {
-        this.employees.push({
+        employees.push({
           id: i.toString(),
           name: 'Manager ' + i,
           office: 'Office ' + i,
@@ -79,7 +79,7 @@ export class SupplierAndConsumerComponent implements OnInit {
         });
         continue;
       }
-      this.employees.push({
+      employees.push({
         id: i.toString(),
         name: 'Employee ' + i,
         office: 'Office ' + i,
@@ -89,11 +89,11 @@ export class SupplierAndConsumerComponent implements OnInit {
       });
     }
 
-    const maxLength = this.employees.length + 10;
+    const maxLength = employees.length + 10;
 
-    for (let i = this.employees.length + 1; i <= maxLength; i++) {
+    for (let i = employees.length + 1; i <= maxLength; i++) {
       console.log('create empl2');
-      this.employees.push({
+      employees.push({
         id: i.toString(),
         name: 'Employee ' + i,
         office: 'Office ' + i,
@@ -102,6 +102,8 @@ export class SupplierAndConsumerComponent implements OnInit {
         upperManagerId: '2',
       });
     }
+
+    return employees;
   }
 
   public onClickNode(data: Node): void {
@@ -110,19 +112,22 @@ export class SupplierAndConsumerComponent implements OnInit {
     console.log('data', data);
     if (nodeData.isExpanded) {
       nodeData.backgroundColor = '#27ac34';
-      // this.nodes = this.createNodes([
-      //   {
-      //     id: '1',
-      //     name: 'Manager ' + 1,
-      //     office: 'Office ' + 1,
-      //     role: 'Manager',
-      //     backgroundColor: '#dc143c',
-      //   },
-      // ]);
-      this.links = [];
-      this.nodes = [];
+      const employee: Employee = {
+        id: '1',
+        name: 'Manager ' + 1,
+        office: 'Office ' + 1,
+        role: 'Manager',
+        backgroundColor: '#dc143c',
+      };
+      this.changeGraph([employee]);
     } else {
-      nodeData.backgroundColor = '#DC143C';
+      nodeData.backgroundColor = '#39dc14';
+      this.changeGraph(this.employees);
     }
+  }
+
+  private changeGraph(employees: Employee[]): void {
+    this.nodes = this.getNodes(employees);
+    this.links = this.getLinks(employees);
   }
 }
