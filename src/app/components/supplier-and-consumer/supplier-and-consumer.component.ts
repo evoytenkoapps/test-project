@@ -30,7 +30,7 @@ export class SupplierAndConsumerComponent implements OnInit {
     this.changeGraph();
   }
 
-  private getNodes(expandedNodes: number[]): Node[] {
+  private getNodes(): Node[] {
     if (this.expandedNodes.length === 0) {
       const employee = this.employees.find((empl) => empl.id === '1') as Employee;
 
@@ -54,7 +54,7 @@ export class SupplierAndConsumerComponent implements OnInit {
     }
     const firstEmployee = this.employees.find((empl) => empl.id === '1') as Employee;
 
-    const addEmployee: Employee[] = expandedNodes
+    const addEmployee: Employee[] = this.expandedNodes
       .map((expandedId) =>
         this.employees
           .filter((empl) => !!empl.upperManagerId)
@@ -66,7 +66,7 @@ export class SupplierAndConsumerComponent implements OnInit {
       .concat([firstEmployee]);
 
     return addEmployee.map((employee) => {
-      const isExpanded: boolean = !!expandedNodes.find((id) => id === +employee.id);
+      const isExpanded: boolean = !!this.expandedNodes.find((id) => id === +employee.id);
       const childrens: number[] = this.employees
         .filter((empl) => empl.upperManagerId === employee.id)
         .map((empl) => +empl.id);
@@ -183,6 +183,6 @@ export class SupplierAndConsumerComponent implements OnInit {
 
   private changeGraph(): void {
     this.links = this.getLinks();
-    this.nodes = this.getNodes(this.expandedNodes);
+    this.nodes = this.getNodes();
   }
 }
