@@ -146,7 +146,7 @@ export class SupplierAndConsumerComponent implements OnInit {
     employees
       .filter((empl) => !!empl.upperManagerId)
       .forEach((subEmpl) => {
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 1; i <= 50; i++) {
           console.log('create empl2');
           const id = ++employees.length;
           employees.push({
@@ -154,7 +154,7 @@ export class SupplierAndConsumerComponent implements OnInit {
             name: 'Employee ' + id,
             office: 'Office ' + id,
             role: 'Engineer',
-            backgroundColor: '#00FFFF',
+            backgroundColor: '#156e6e',
             upperManagerId: subEmpl.id,
           });
         }
