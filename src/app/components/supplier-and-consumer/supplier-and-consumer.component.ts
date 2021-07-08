@@ -16,7 +16,7 @@ export class SupplierAndConsumerComponent implements OnInit {
 
   public nodes: Readonly<Node>[] = [];
   public links: Readonly<Edge>[] = [];
-  private expandedNodes: Readonly<number>[] = [];
+  private expandedNodes: number[] = [];
   public layoutSettings = {
     orientation: Orientation.LEFT_TO_RIGHT,
   };
@@ -33,6 +33,9 @@ export class SupplierAndConsumerComponent implements OnInit {
   private getNodes(employees: Employee[], expandedNodes: number[]): Node[] {
     return employees.map((employee) => {
       const isExpanded: boolean = !!expandedNodes.find((id) => id === +employee.id);
+      const childrens: number[] = employees
+        .filter((empl) => empl.upperManagerId === employee.id)
+        .map((empl) => +empl.id);
       return {
         id: employee.id,
         label: employee.name,
@@ -41,6 +44,7 @@ export class SupplierAndConsumerComponent implements OnInit {
           role: employee.role,
           backgroundColor: employee.backgroundColor,
           isExpanded,
+          childrens,
         } as NodeData,
       };
     });
@@ -108,24 +112,20 @@ export class SupplierAndConsumerComponent implements OnInit {
     return employees;
   }
 
-  public onClickNode(data: Node): void {
-    const nodeData: NodeData = data.data;
+  public onClickNode(node: Node): void {
+    const nodeData: NodeData = node.data;
     nodeData.isExpanded = !nodeData.isExpanded;
-    console.log('data', data);
+    console.log('data', node);
     if (nodeData.isExpanded) {
-      nodeData.backgroundColor = '#27ac34';
-      const employee: Employee = {
-        id: '1',
-        name: 'Manager ' + 1,
-        office: 'Office ' + 1,
-        role: 'Manager',
-        backgroundColor: '#dc143c',
-      };
-      this.changeGraph([employee], [1]);
+      this.expandedNodes = [...this.expandedNodes, +node.id];
     } else {
-      nodeData.backgroundColor = '#39dc14';
-      this.changeGraph(this.employees, []);
+      const index = this.expandedNodes.indexOf(+node.id);
+      if (index > -1) {
+        this.expandedNodes.splice(index, 1);
+      }
     }
+
+    this.expandedNodes;
   }
 
   private changeGraph(employees: Employee[], expandedNodes: number[]): void {

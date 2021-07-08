@@ -12,4 +12,5 @@ export interface NodeData {
   role: string;
   backgroundColor: string;
   isExpanded: boolean;
+  childrens: number[];
 }
