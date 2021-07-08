@@ -14,7 +14,7 @@ import { max } from 'rxjs/operators';
 export class SupplierAndConsumerComponent implements OnInit {
   @Input() employees: Employee[] = [];
 
-  public nodes: Node[] = [];
+  public nodes: Readonly<Node>[] = [];
   public links: Edge[] = [];
   public layoutSettings = {
     orientation: Orientation.LEFT_TO_RIGHT,
@@ -22,28 +22,15 @@ export class SupplierAndConsumerComponent implements OnInit {
   public curve: any = shape.curveLinear;
   public layout: Layout = new DagreNodesOnlyLayout();
 
-  constructor() {
-    this.createEmployee();
-  }
+  constructor() {}
 
   public ngOnInit(): void {
-    this.nodes = this.createNodes(this.employees);
-    for (const employee of this.employees) {
-      if (!employee.upperManagerId) {
-        continue;
-      }
-
-      const edge: Edge = {
-        source: employee.upperManagerId,
-        target: employee.id,
-        label: '',
-      };
-
-      this.links.push(edge);
-    }
+    this.createEmployees();
+    this.nodes = this.getNodes(this.employees);
+    this.links = this.getLinks(this.employees);
   }
 
-  private createNodes(employees: Employee[]): Node[] {
+  private getNodes(employees: Employee[]): Node[] {
     return employees.map((employee) => {
       return {
         id: employee.id,
@@ -58,6 +45,18 @@ export class SupplierAndConsumerComponent implements OnInit {
     });
   }
 
+  private getLinks(employees: Employee[]): Edge[] {
+    return employees
+      .filter((employee) => !!employee.upperManagerId)
+      .map((employee) => {
+        return {
+          source: employee.upperManagerId,
+          target: employee.id,
+          label: '',
+        } as Edge;
+      });
+  }
+
   public getStyles(node: Node): any {
     return {
       'background-color': node.data.backgroundColor,
@@ -68,8 +67,8 @@ export class SupplierAndConsumerComponent implements OnInit {
     console.log('data', data);
   }
 
-  private createEmployee(): void {
-    for (let i = 1; i <= 500; i++) {
+  private createEmployees(): void {
+    for (let i = 1; i <= 10; i++) {
       if (i === 1) {
         this.employees.push({
           id: i.toString(),
@@ -120,6 +119,8 @@ export class SupplierAndConsumerComponent implements OnInit {
       //     backgroundColor: '#dc143c',
       //   },
       // ]);
+      this.links = [];
+      this.nodes = [];
     } else {
       nodeData.backgroundColor = '#DC143C';
     }
