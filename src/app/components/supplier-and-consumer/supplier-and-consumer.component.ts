@@ -27,13 +27,47 @@ export class SupplierAndConsumerComponent implements OnInit {
 
   public ngOnInit(): void {
     this.employees = this.getEmployees();
-    this.changeGraph(this.employees, this.expandedNodes);
+    this.changeGraph();
   }
 
-  private getNodes(employees: Employee[], expandedNodes: number[]): Node[] {
-    return employees.map((employee) => {
+  private getNodes(expandedNodes: number[]): Node[] {
+    if (this.expandedNodes.length === 0) {
+      const employee = this.employees.find((empl) => empl.id === '1') as Employee;
+
+      const childrens: number[] = this.employees
+        .filter((empl) => empl.upperManagerId === employee.id)
+        .map((empl) => +empl.id);
+
+      return [
+        {
+          id: employee.id,
+          label: employee.name,
+          data: {
+            office: employee.office,
+            role: employee.role,
+            backgroundColor: employee.backgroundColor,
+            isExpanded: false,
+            childrens,
+          } as NodeData,
+        },
+      ];
+    }
+    const firstEmployee = this.employees.find((empl) => empl.id === '1') as Employee;
+
+    const addEmployee: Employee[] = expandedNodes
+      .map((expandedId) =>
+        this.employees
+          .filter((empl) => !!empl.upperManagerId)
+          .filter((empl) => +(empl.upperManagerId as string) === expandedId)
+      )
+      .reduce((prev, next) => {
+        return prev.concat(next);
+      })
+      .concat([firstEmployee]);
+
+    return addEmployee.map((employee) => {
       const isExpanded: boolean = !!expandedNodes.find((id) => id === +employee.id);
-      const childrens: number[] = employees
+      const childrens: number[] = this.employees
         .filter((empl) => empl.upperManagerId === employee.id)
         .map((empl) => +empl.id);
       return {
@@ -50,8 +84,22 @@ export class SupplierAndConsumerComponent implements OnInit {
     });
   }
 
-  private getLinks(employees: Employee[]): Edge[] {
-    return employees
+  private getLinks(): Edge[] {
+    if (this.expandedNodes.length === 0) {
+      return [];
+    }
+    const firstEmployee = this.employees.find((empl) => empl.id === '1') as Employee;
+
+    return this.expandedNodes
+      .map((expandedId) =>
+        this.employees
+          .filter((empl) => !!empl.upperManagerId)
+          .filter((empl) => +(empl.upperManagerId as string) === expandedId)
+      )
+      .reduce((prev, next) => {
+        return prev.concat(next);
+      })
+      .concat([firstEmployee])
       .filter((employee) => !!employee.upperManagerId)
       .map((employee) => {
         return {
@@ -114,22 +162,27 @@ export class SupplierAndConsumerComponent implements OnInit {
 
   public onClickNode(node: Node): void {
     const nodeData: NodeData = node.data;
-    nodeData.isExpanded = !nodeData.isExpanded;
-    console.log('data', node);
-    if (nodeData.isExpanded) {
-      this.expandedNodes = [...this.expandedNodes, +node.id];
-    } else {
-      const index = this.expandedNodes.indexOf(+node.id);
-      if (index > -1) {
-        this.expandedNodes.splice(index, 1);
+    if (nodeData.childrens.length > 0) {
+      nodeData.isExpanded = !nodeData.isExpanded;
+      console.log('data', node);
+      if (nodeData.isExpanded) {
+        this.expandedNodes = [...this.expandedNodes, +node.id];
+      } else {
+        if (node.id === '1') {
+          this.expandedNodes = [];
+        } else {
+          const index = this.expandedNodes.indexOf(+node.id);
+          if (index > -1) {
+            this.expandedNodes.splice(index, 1);
+          }
+        }
       }
+      this.changeGraph();
     }
-
-    this.expandedNodes;
   }
 
-  private changeGraph(employees: Employee[], expandedNodes: number[]): void {
-    this.nodes = this.getNodes(employees, expandedNodes);
-    this.links = this.getLinks(employees);
+  private changeGraph(): void {
+    this.links = this.getLinks();
+    this.nodes = this.getNodes(this.expandedNodes);
   }
 }
