@@ -143,19 +143,22 @@ export class SupplierAndConsumerComponent implements OnInit {
       });
     }
 
-    const maxLength = employees.length + 10;
-
-    for (let i = employees.length + 1; i <= maxLength; i++) {
-      console.log('create empl2');
-      employees.push({
-        id: i.toString(),
-        name: 'Employee ' + i,
-        office: 'Office ' + i,
-        role: 'Engineer',
-        backgroundColor: '#00FFFF',
-        upperManagerId: '2',
+    employees
+      .filter((empl) => !!empl.upperManagerId)
+      .forEach((subEmpl) => {
+        for (let i = 1; i <= 10; i++) {
+          console.log('create empl2');
+          const id = ++employees.length;
+          employees.push({
+            id: id.toString(),
+            name: 'Employee ' + id,
+            office: 'Office ' + id,
+            role: 'Engineer',
+            backgroundColor: '#00FFFF',
+            upperManagerId: subEmpl.id,
+          });
+        }
       });
-    }
 
     return employees;
   }
