@@ -15,7 +15,8 @@ export class SupplierAndConsumerComponent implements OnInit {
   @Input() employees: Employee[] = [];
 
   public nodes: Readonly<Node>[] = [];
-  public links: Edge[] = [];
+  public links: Readonly<Edge>[] = [];
+  private expandedNodes: Readonly<number>[] = [];
   public layoutSettings = {
     orientation: Orientation.LEFT_TO_RIGHT,
   };
@@ -26,11 +27,12 @@ export class SupplierAndConsumerComponent implements OnInit {
 
   public ngOnInit(): void {
     this.employees = this.getEmployees();
-    this.changeGraph(this.employees);
+    this.changeGraph(this.employees, this.expandedNodes);
   }
 
-  private getNodes(employees: Employee[]): Node[] {
+  private getNodes(employees: Employee[], expandedNodes: number[]): Node[] {
     return employees.map((employee) => {
+      const isExpanded: boolean = !!expandedNodes.find((id) => id === +employee.id);
       return {
         id: employee.id,
         label: employee.name,
@@ -38,7 +40,7 @@ export class SupplierAndConsumerComponent implements OnInit {
           office: employee.office,
           role: employee.role,
           backgroundColor: employee.backgroundColor,
-          isExpanded: false,
+          isExpanded,
         } as NodeData,
       };
     });
@@ -119,15 +121,15 @@ export class SupplierAndConsumerComponent implements OnInit {
         role: 'Manager',
         backgroundColor: '#dc143c',
       };
-      this.changeGraph([employee]);
+      this.changeGraph([employee], [1]);
     } else {
       nodeData.backgroundColor = '#39dc14';
-      this.changeGraph(this.employees);
+      this.changeGraph(this.employees, []);
     }
   }
 
-  private changeGraph(employees: Employee[]): void {
-    this.nodes = this.getNodes(employees);
+  private changeGraph(employees: Employee[], expandedNodes: number[]): void {
+    this.nodes = this.getNodes(employees, expandedNodes);
     this.links = this.getLinks(employees);
   }
 }
