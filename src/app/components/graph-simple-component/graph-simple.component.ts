@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 
 interface NodeData {
+  id: number;
   name: string;
   x: number;
   y: number;
+  isChildren: boolean;
+  isExpanded: boolean;
 }
 
 interface LinkData {
@@ -19,14 +22,14 @@ interface LinkData {
 })
 export class GraphSimpleComponent implements OnInit {
   private chart: any;
-  public updateOptions: any = { series: [{ data: [] }] };
+  private expandedNodes: number[] = [];
   public options: any = {
     title: {
       text: 'Simple Graph',
     },
     tooltip: {},
-    animationDurationUpdate: 1500,
-    animationEasingUpdate: 'quinticInOut',
+    // animationDurationUpdate: 1500,
+    // animationEasingUpdate: 'quinticInOut',
     series: [
       {
         type: 'graph',
@@ -47,28 +50,7 @@ export class GraphSimpleComponent implements OnInit {
             },
           },
         },
-        data: [
-          // {
-          //   name: 'Node 1',
-          //   x: 0,
-          //   y: 0,
-          // },
-          // {
-          //   name: 'Node 2',
-          //   x: 0,
-          //   y: 0,
-          // },
-          // {
-          //   name: 'Node 3',
-          //   x: 550,
-          //   y: 100,
-          // },
-          // {
-          //   name: 'Node 4',
-          //   x: 550,
-          //   y: 500,
-          // },
-        ],
+        data: [],
         links: [],
         // links: [
         //   {
@@ -132,11 +114,11 @@ export class GraphSimpleComponent implements OnInit {
     const links = this.options.series[0].links as LinkData[];
     for (let i = 1; i <= 50; i++) {
       if (i === 1) {
-        data.push({ name: 'Node ' + i, x: 100, y: i * 100 });
+        data.push({ id: i, name: 'Node ' + i, x: 100, y: i * 100, isChildren: true, isExpanded: false });
         continue;
       }
       const name = 'Node ' + i;
-      const nodeData: NodeData = { name, x: 200, y: i * 100 };
+      const nodeData: NodeData = { id: i, name, x: 200, y: i * 100, isChildren: false, isExpanded: false };
       data.push(nodeData);
       links.push({
         source: 'Node 1',
@@ -145,18 +127,24 @@ export class GraphSimpleComponent implements OnInit {
     }
   }
 
-  public onChartClick(data: any): void {
+  public onChartClick(data: NodeData): void {
     console.log(data);
-    // let nodeData = this.options.series[0].data as NodeData[];
-    // nodeData = [];
-    // this.updateOptions.series[0].data = [{ name: 'Node ' + 1, x: 100, y: 1 * 100 }];
-    // this.updateOptions.series[0].links = [];
-    // this.options.series[0].data = [];
-    // this.options.series[0].links = [];
-    //
-    // this.updateOptions = { series: [{ data: [] }] };
+    if (data.isChildren) {
+      if (data.id === 1 && data.isExpanded) {
+        this.expandedNodes = [];
+      }
+    }
 
-    this.chart.setOption(this.updateOptions);
+    this.updateGraph();
+  }
+
+  private updateGraph(): void {
+    const nodeData: NodeData[] = [];
+    if (this.expandedNodes.length === 0) {
+      this.chart.setOption({
+        series: [{ data: [{ id: 1, name: 'Node ' + 1, x: 100, y: 100, isChildren: true, isExpanded: false }] }],
+      });
+    }
   }
 
   public onInit(data: any): void {

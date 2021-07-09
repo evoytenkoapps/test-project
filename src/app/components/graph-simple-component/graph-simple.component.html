@@ -1,9 +1,8 @@
 <div
   echarts
   [options]="options"
-  [merge]="options"
   class="demo-chart"
   [initOpts]="{ width: 1000, height: 1000 }"
-  (chartClick)="onChartClick($event)"
+  (chartClick)="onChartClick($event.data)"
   (chartInit)="onInit($event)"
 ></div>
