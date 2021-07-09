@@ -126,7 +126,7 @@ export class SupplierAndConsumerComponent implements OnInit {
       if (i === 1) {
         employees.push({
           id: i.toString(),
-          name: 'Manager ' + i,
+          name: 'Manager 1111111111' + i,
           office: 'Office ' + i,
           role: 'Manager',
           backgroundColor: '#dc143c',

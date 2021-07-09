@@ -45,5 +45,10 @@
       stroke-dasharray: 4 !important;
     }
   }
-
+  .graph {
+    .panning-rect {
+      width: 1000000px;
+      height: 1000000px;
+    }
+  }
 }
