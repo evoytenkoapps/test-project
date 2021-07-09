@@ -1,1 +1,9 @@
-<div echarts [options]="options" class="demo-chart" [initOpts]="{ width: 1000, height: 1000 }"></div>
+<div
+  echarts
+  [options]="options"
+  [merge]="options"
+  class="demo-chart"
+  [initOpts]="{ width: 1000, height: 1000 }"
+  (chartClick)="onChartClick($event)"
+  (chartInit)="onInit($event)"
+></div>

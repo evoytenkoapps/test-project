@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as echarts from 'echarts/core';
-import { EChartsOption, GraphSeriesOption } from 'echarts';
+import { EChartsOption } from 'echarts';
 
 interface NodeData {
   name: string;
@@ -19,7 +18,9 @@ interface LinkData {
   styleUrls: ['./graph-simple.component.css'],
 })
 export class GraphSimpleComponent implements OnInit {
-  options = {
+  private chart: any;
+  public updateOptions: any = { series: [{ data: [] }] };
+  public options: any = {
     title: {
       text: 'Simple Graph',
     },
@@ -129,7 +130,7 @@ export class GraphSimpleComponent implements OnInit {
   ngOnInit(): void {
     const data = this.options.series[0].data as NodeData[];
     const links = this.options.series[0].links as LinkData[];
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 50; i++) {
       if (i === 1) {
         data.push({ name: 'Node ' + i, x: 100, y: i * 100 });
         continue;
@@ -142,5 +143,24 @@ export class GraphSimpleComponent implements OnInit {
         target: name,
       });
     }
+  }
+
+  public onChartClick(data: any): void {
+    console.log(data);
+    // let nodeData = this.options.series[0].data as NodeData[];
+    // nodeData = [];
+    // this.updateOptions.series[0].data = [{ name: 'Node ' + 1, x: 100, y: 1 * 100 }];
+    // this.updateOptions.series[0].links = [];
+    // this.options.series[0].data = [];
+    // this.options.series[0].links = [];
+    //
+    // this.updateOptions = { series: [{ data: [] }] };
+
+    this.chart.setOption(this.updateOptions);
+  }
+
+  public onInit(data: any): void {
+    console.log('onInit', data);
+    this.chart = data;
   }
 }
