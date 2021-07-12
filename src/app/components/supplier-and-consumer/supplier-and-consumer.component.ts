@@ -90,7 +90,7 @@ export class SupplierAndConsumerComponent implements OnInit {
     }
     const firstEmployee = this.employees.find((empl) => empl.id === '1') as Employee;
 
-    return this.expandedNodes
+    const emplHasParent = this.expandedNodes
       .map((expandedId) =>
         this.employees
           .filter((empl) => !!empl.upperManagerId)
@@ -98,7 +98,9 @@ export class SupplierAndConsumerComponent implements OnInit {
       )
       .reduce((prev, next) => {
         return prev.concat(next);
-      })
+      });
+
+    const oneLink = emplHasParent
       .concat([firstEmployee])
       .filter((employee) => !!employee.upperManagerId)
       .map((employee) => {
@@ -108,6 +110,18 @@ export class SupplierAndConsumerComponent implements OnInit {
           label: '',
         } as Edge;
       });
+
+    const twoLinks = emplHasParent
+      .filter((empl) => !!empl.downManagerId)
+      .map((employee) => {
+        return {
+          source: employee.id.toString(),
+          target: firstEmployee.id.toString(),
+          label: '',
+        } as Edge;
+      });
+
+    return oneLink.concat(twoLinks);
   }
 
   public getStyles(node: Node): any {
@@ -174,6 +188,7 @@ export class SupplierAndConsumerComponent implements OnInit {
             role: 'Engineer',
             backgroundColor: '#f118d4',
             upperManagerId: subEmpl.id,
+            downManagerId: 1,
           });
         }
       });
@@ -182,10 +197,11 @@ export class SupplierAndConsumerComponent implements OnInit {
   }
 
   public onClickNode(node: Node): void {
+    console.log('node', node);
     const nodeData: NodeData = node.data;
     if (nodeData.childrens.length > 0) {
       nodeData.isExpanded = !nodeData.isExpanded;
-      console.log('data', node);
+      console.log('clicked node', node);
       if (nodeData.isExpanded) {
         this.expandedNodes = [...this.expandedNodes, +node.id];
       } else {

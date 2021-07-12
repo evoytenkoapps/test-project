@@ -5,6 +5,7 @@ export interface Employee {
   role: string;
   backgroundColor: string;
   upperManagerId?: string;
+  downManagerId?: number;
 }
 
 export interface NodeData {
