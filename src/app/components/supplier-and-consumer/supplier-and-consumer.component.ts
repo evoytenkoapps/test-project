@@ -160,6 +160,24 @@ export class SupplierAndConsumerComponent implements OnInit {
         }
       });
 
+    employees
+      .filter((empl) => !!empl.upperManagerId)
+      .filter((empl) => empl.upperManagerId !== '1')
+      .forEach((subEmpl) => {
+        for (let i = 1; i <= 2; i++) {
+          console.log('create empl3');
+          const id = ++employees.length;
+          employees.push({
+            id: id.toString(),
+            name: 'Employee ' + id,
+            office: 'Office ' + id,
+            role: 'Engineer',
+            backgroundColor: '#f118d4',
+            upperManagerId: subEmpl.id,
+          });
+        }
+      });
+
     return employees;
   }
 
