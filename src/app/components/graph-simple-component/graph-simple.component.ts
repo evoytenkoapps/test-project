@@ -130,23 +130,37 @@ export class GraphSimpleComponent implements OnInit {
   private updateGraph(): void {
     const nodeData: NodeData[] = [];
     if (this.expandedNodes.length === 0) {
-      // this.options.series[0].data = [];
-      // this.options.series[0].links = [];
+      this.options.series[0].data = [{ id: 1, name: 'Node ' + 1, x: 100, y: 100, isChildren: true, isExpanded: false }];
+      this.options.series[0].links = [];
       this.chart.setOption(this.options);
     } else {
       const data: NodeData[] = [];
       const links: LinkData[] = [];
       for (let i = 1; i <= 50; i++) {
         if (i === 1) {
-          data.push({ id: i, name: 'Node ' + i, x: 100, y: i * 100, isChildren: true, isExpanded: false });
+          data.push({
+            id: i,
+            name: 'Node ' + i,
+            x: 100,
+            y: i * 100,
+            isChildren: true,
+            isExpanded: !!this.expandedNodes.find((id) => id === i),
+          });
           continue;
         }
         const name = 'Node ' + i;
-        const nodeData: NodeData = { id: i, name, x: 200, y: i * 100, isChildren: false, isExpanded: false };
+        const nodeData: NodeData = {
+          id: i,
+          name,
+          x: 200,
+          y: i * 100,
+          isChildren: false,
+          isExpanded: !!this.expandedNodes.find((id) => id === i),
+        };
         data.push(nodeData);
         links.push({
-          source: 'Node 1',
-          target: name,
+          source: '1',
+          target: i + '',
         });
       }
       this.options.series[0].data = data;
