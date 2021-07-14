@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 
 interface NodeData {
@@ -110,28 +110,17 @@ export class GraphSimpleComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    const data = this.options.series[0].data as NodeData[];
-    const links = this.options.series[0].links as LinkData[];
-    for (let i = 1; i <= 50; i++) {
-      if (i === 1) {
-        data.push({ id: i, name: 'Node ' + i, x: 100, y: i * 100, isChildren: true, isExpanded: false });
-        continue;
-      }
-      const name = 'Node ' + i;
-      const nodeData: NodeData = { id: i, name, x: 200, y: i * 100, isChildren: false, isExpanded: false };
-      data.push(nodeData);
-      links.push({
-        source: 'Node 1',
-        target: name,
-      });
-    }
+    this.options.series[0].data.push({ id: 1, name: 'Node ' + 1, x: 100, y: 100, isChildren: true, isExpanded: false });
   }
 
   public onChartClick(data: NodeData): void {
     console.log(data);
     if (data.isChildren) {
-      if (data.id === 1 && data.isExpanded) {
+      data.isExpanded = !data.isExpanded;
+      if (data.id === 1 && !data.isExpanded) {
         this.expandedNodes = [];
+      } else {
+        this.expandedNodes.push(data.id);
       }
     }
 
@@ -141,14 +130,34 @@ export class GraphSimpleComponent implements OnInit {
   private updateGraph(): void {
     const nodeData: NodeData[] = [];
     if (this.expandedNodes.length === 0) {
-      this.chart.setOption({
-        series: [{ data: [{ id: 1, name: 'Node ' + 1, x: 100, y: 100, isChildren: true, isExpanded: false }] }],
-      });
+      // this.options.series[0].data = [];
+      // this.options.series[0].links = [];
+      this.chart.setOption(this.options);
+    } else {
+      const data: NodeData[] = [];
+      const links: LinkData[] = [];
+      for (let i = 1; i <= 50; i++) {
+        if (i === 1) {
+          data.push({ id: i, name: 'Node ' + i, x: 100, y: i * 100, isChildren: true, isExpanded: false });
+          continue;
+        }
+        const name = 'Node ' + i;
+        const nodeData: NodeData = { id: i, name, x: 200, y: i * 100, isChildren: false, isExpanded: false };
+        data.push(nodeData);
+        links.push({
+          source: 'Node 1',
+          target: name,
+        });
+      }
+      this.options.series[0].data = data;
+      this.options.series[0].links = links;
+      this.chart.setOption(this.options);
     }
   }
 
   public onInit(data: any): void {
     console.log('onInit', data);
     this.chart = data;
+    this.updateGraph();
   }
 }
