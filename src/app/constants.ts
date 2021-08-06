@@ -10,6 +10,7 @@ export const authCodeFlowConfig: AuthConfig = {
   // The SPA's id. The SPA is registerd with this id at the auth-server
   // clientId: 'server.code',
   clientId: 'video-online-dev',
-
+  disablePKCE: false,
+  scope: 'openid profile email voucher',
   showDebugInformation: true,
 };
