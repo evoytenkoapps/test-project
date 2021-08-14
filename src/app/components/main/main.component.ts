@@ -19,4 +19,8 @@ export class MainComponent implements OnInit {
     console.log('getter');
     return 'getter';
   }
+
+  public onClick(): void {
+    console.log('onClick');
+  }
 }
