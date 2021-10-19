@@ -30,6 +30,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     interval(2000).subscribe(() => {
       console.log('interval');
       this.someText = '-';
+      this.animalFacade.updateAnimal('asdasd');
     });
 
     this.someService.getData().subscribe((data) => {
@@ -38,7 +39,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
 
     this.animalFacade
-      .updateData()
+      .getAnimal()
       .pipe(filter((animal) => animal !== ''))
       .subscribe((animal) => {
         console.log('animal', animal);

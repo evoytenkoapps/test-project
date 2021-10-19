@@ -13,5 +13,6 @@ export enum MyStatus {
 }
 
 export abstract class AnimalFacade {
-  public abstract updateData(): Observable<string>;
+  public abstract getAnimal(): Observable<string>;
+  public abstract updateAnimal(animal: string): Observable<string>;
 }
