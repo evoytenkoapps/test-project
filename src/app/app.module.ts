@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, InjectionToken, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -16,6 +16,7 @@ import { MobileService } from './mobile-service';
 //     });
 //   };
 // }
+export const APP_TOKEN: InjectionToken<string> = new InjectionToken<string>('APP_TOKEN');
 
 @NgModule({
   declarations: [AppComponent, MainComponent],
@@ -36,6 +37,16 @@ import { MobileService } from './mobile-service';
         return new MobileService();
       },
       deps: [FeatureFlagsService],
+    },
+
+    {
+      provide: APP_TOKEN,
+      useFactory: () => (x: number) => {
+        console.log('Object created', +new Date());
+        return {
+          a: x,
+        };
+      },
     },
   ],
   bootstrap: [AppComponent],
