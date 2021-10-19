@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { interval } from 'rxjs';
 import { SomeService } from '../../some.service';
+import { AnimalFacade } from '../../facade/animal.facade';
 
 @Component({
   selector: 'app-main',
@@ -11,7 +12,11 @@ import { SomeService } from '../../some.service';
 export class MainComponent implements OnInit, AfterViewInit {
   public someText: string = 'someText';
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private someService: SomeService) {}
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private someService: SomeService,
+    private animalFacade: AnimalFacade
+  ) {}
 
   ngOnInit(): void {
     console.log('ngOnInit');
