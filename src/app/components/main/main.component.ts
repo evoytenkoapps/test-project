@@ -35,6 +35,11 @@ export class MainComponent implements OnInit, AfterViewInit {
       console.log('data', data);
       this.someText = data;
     });
+
+    this.animalFacade.updateData().subscribe((animal) => {
+      console.log('animal', animal);
+      this.someText = animal;
+    });
   }
 
   ngAfterViewInit(): void {
