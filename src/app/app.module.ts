@@ -16,7 +16,7 @@ import { MobileService } from './mobile-service';
 //     });
 //   };
 // }
-export const APP_TOKEN: InjectionToken<string> = new InjectionToken<string>('APP_TOKEN');
+export const APP_FACTORY: InjectionToken<string> = new InjectionToken<string>('APP_FACTORY');
 
 @NgModule({
   declarations: [AppComponent, MainComponent],
@@ -40,7 +40,7 @@ export const APP_TOKEN: InjectionToken<string> = new InjectionToken<string>('APP
     },
 
     {
-      provide: APP_TOKEN,
+      provide: APP_FACTORY,
       useFactory: () => (x: number) => {
         console.log('Object created', +new Date());
         return {
