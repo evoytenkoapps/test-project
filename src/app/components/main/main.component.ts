@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, O
 import { interval } from 'rxjs';
 import { SomeService } from '../../some.service';
 import { AnimalFacade } from '../../facade/animal.facade';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-main',
@@ -36,10 +37,13 @@ export class MainComponent implements OnInit, AfterViewInit {
       this.someText = data;
     });
 
-    this.animalFacade.updateData().subscribe((animal) => {
-      console.log('animal', animal);
-      this.someText = animal;
-    });
+    this.animalFacade
+      .updateData()
+      .pipe(filter((animal) => animal !== ''))
+      .subscribe((animal) => {
+        console.log('animal', animal);
+        this.someText = animal;
+      });
   }
 
   ngAfterViewInit(): void {
