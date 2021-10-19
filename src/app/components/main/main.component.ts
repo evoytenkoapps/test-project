@@ -11,7 +11,7 @@ import { filter } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainComponent implements OnInit, AfterViewInit {
-  public someText: string = 'someText';
+  public someText = { text: 'someText' };
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -23,19 +23,19 @@ export class MainComponent implements OnInit, AfterViewInit {
     console.log('ngOnInit');
 
     setTimeout(() => {
-      this.someText = '+';
+      this.someText = { text: '+' };
       // this.changeDetectorRef.markForCheck();
     }, 2000);
 
-    interval(2000).subscribe(() => {
-      console.log('interval');
-      this.someText = '-';
-      this.animalFacade.updateAnimal('asdasd');
-    });
+    // interval(2000).subscribe(() => {
+    //   console.log('interval');
+    //   this.someText = '-';
+    //   this.animalFacade.updateAnimal('asdasd');
+    // });
 
     this.someService.getData().subscribe((data) => {
       console.log('data', data);
-      this.someText = data;
+      // this.someText = data;
     });
 
     this.animalFacade
@@ -43,7 +43,7 @@ export class MainComponent implements OnInit, AfterViewInit {
       .pipe(filter((animal) => animal !== ''))
       .subscribe((animal) => {
         console.log('animal', animal);
-        this.someText = animal;
+        this.someText = { text: animal };
       });
   }
 
